@@ -1,0 +1,39 @@
+exports.onMessageReceived = (function Version(bot, doc, user, userID, channelID, message, event) {
+    if(message === undefined){
+        return;
+    }
+    if (message.startsWith("*js ")) {
+        if (userID === "222369396214071297") {
+            var jstest = message.match(/^.{4}(.*)/)[1];
+            try {
+                eval(bot.sendMessage({
+                    to: channelID,
+                    message: eval(jstest)
+                }));
+                eval(bot.sendMessage({
+                    to: 222393788755083264,
+                    message: eval(user + " ran JavaScript code (`" + jstest + "`) with output: `" + eval(jstest) + "`.")
+                }));
+            } catch (err) {
+                bot.sendMessage({
+                    to: doc.logchannel,
+                    message: user + " ran JavaScript code (`" + jstest + "`) with errors: `" + err + "`."
+                })
+                bot.sendMessage({
+                    to: channelID,
+                    message: "You got errors: `" + err + "`!"
+                });
+            }
+        } else {
+            bot.sendMessage({
+                to: doc.logchannel,
+                message: user + " ran JavaScript code (`" + jstest + "`) without sufficient permission."
+            })
+            bot.sendMessage({
+                to: channelID,
+                message: "You are currently not allowed to use this feature. Try again later."
+            });
+        }
+    }
+
+});
